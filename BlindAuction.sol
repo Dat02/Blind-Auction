@@ -32,7 +32,7 @@ contract BlindAuction{
     event EndedAuction(address winner, uint benifit);
 
    struct Bid{
-       bytes32 data;
+       string data;
        uint deposit;
     }
 
@@ -52,7 +52,7 @@ contract BlindAuction{
     }
 
 
-    function SubmitBid(bytes32 _data) external payable inBiddingTime(block.timestamp){
+    function SubmitBid(string _data) external payable inBiddingTime(block.timestamp){
         require(msg.value >= highestBid,"Not enough money");
         bids[msg.sender].push(Bid(_data,msg.value));
 
