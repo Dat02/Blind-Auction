@@ -1,4 +1,5 @@
 pragma solidity >=0.7.11;
+
 /*
     Bid:
     - Thoi gian dau gia con hoat dong
@@ -18,17 +19,20 @@ contract BlindAuction {
     address payable public beneficiary;
     uint256 public auctionEndTime;
 
-    uint256 public highestBid;
-    address public highestBidder;
+    uint256 private highestBid;
+    address private highestBidder;
 
     bool ended = false;
-    
+
     // Allowed withdrawals of previous bids
     mapping(address => uint256) public pendingReturns;
 
     event highestBidIncrease(address bidder, uint256 amount);
     event auctionEnded(address winner, uint256 amount);
 
+    modifier onlyAfter(uint _time) 
+    {require(block.timestamp > _time);
+        _;}
     constructor(uint256 _biddingTime, address payable _beneficiary){
         beneficiary = _beneficiary;
         auctionEndTime = block.timestamp+_biddingTime;
@@ -61,7 +65,7 @@ contract BlindAuction {
         }
         return true;
     }
-    function auctionEnd() public{
+      function auctionEnd() public{
         if(ended){
             revert("Phien dau gia da co the ket thuc");
         }
@@ -72,5 +76,10 @@ contract BlindAuction {
         emit auctionEnded(highestBidder, highestBid);
         // transfer
         beneficiary.transfer(highestBid);
+    }
+    function reveal()  public view returns (uint256){
+            require(ended , "Phien dau gia chua ket thuc");
+            require(msg.sender == beneficiary, "Chi co ng to chuc moi xem duoc");
+            return highestBid;
     }
 }
