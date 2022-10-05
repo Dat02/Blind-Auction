@@ -25,7 +25,7 @@ contract BlindAuction{
     uint private highestBid;
     address payable beneficiary;
 
-    mapping (address => uint) refund;
+    mapping (address => uint) public refund;
     mapping (address => Bid[]) bids;
 
     event highestBidIncrease(address bidder, uint amount);
