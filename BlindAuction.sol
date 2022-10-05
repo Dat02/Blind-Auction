@@ -40,8 +40,12 @@ contract BlindAuction{
         startAuctionTime = block.timestamp;
         beneficiary = _beneficiary;
         EndAuctionTime = startAuctionTime + _timeBinding;
-    } 
-
+    }
+    
+    function getDataBids(address _bidder, uint _index) public returns (string memory) {
+        return bids[_bidder][_index].data;
+    }
+    
     modifier inBiddingTime(uint timestamp){
         require(timestamp < EndAuctionTime,"auction has ended");
         _;
