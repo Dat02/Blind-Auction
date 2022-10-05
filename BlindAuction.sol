@@ -37,6 +37,7 @@ contract BlindAuction{
     }
 
     constructor(address payable _beneficiary, uint _timeBinding){
+        startAuctionTime = block.timestamp;
         beneficiary = _beneficiary;
         EndAuctionTime = startAuctionTime + _timeBinding;
     } 
