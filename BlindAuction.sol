@@ -52,7 +52,7 @@ contract BlindAuction{
     }
 
 
-    function SubmitBid(string _data) external payable inBiddingTime(block.timestamp){
+    function SubmitBid(string memory _data) external payable inBiddingTime(block.timestamp){
         require(msg.value >= highestBid,"Not enough money");
         bids[msg.sender].push(Bid(_data,msg.value));
 
