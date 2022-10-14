@@ -1,6 +1,6 @@
 pragma solidity 0.8.10 ;
-import "./ierc.sol";
-
+// import "./ierc.sol";
+import 'https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol';
 contract Auction {
 
     IERC20 public immutable token;
@@ -60,13 +60,29 @@ contract Auction {
         return keccak256(abi.encode(_bidder, _amount));
     }
 
-    function Reveal(uint _amount) external inRevealTime (block.timestamp) {
+   
+    // function Reveal(uint _amount) external inRevealTime (block.timestamp) {
+    //    require (getBytesInfo(msg.sender, _amount) == bidInfo[msg.sender], "bidder's info is invalid");
+    //     require (_amount > highestBid, "you bidded not enough money");
+    //     highestBid = _amount;
+    //     highestBidder = msg.sender;
+    //     if (highestBid != 0) refund[highestBidder] = highestBid;
+    //     token.transferFrom(msg.sender, address(this), _amount);
+    // }
+     function Reveal(uint _amount) external inRevealTime (block.timestamp) {
         require (getBytesInfo(msg.sender, _amount) == bidInfo[msg.sender], "bidder's info is invalid");
-        require (_amount > highestBid, "you bidded not enough money");
-        highestBid = _amount;
-        highestBidder = msg.sender;
-        if (highestBid != 0) refund[highestBidder] = highestBid;
-        token.transferFrom(msg.sender, address(this), _amount);
+        // require (_amount > highestBid, "you bidded not enough money");
+        if(_amount>=highestBid){
+            refund[highestBidder] = highestBid;
+            token.transfer(highestBidder, highestBid);
+            highestBid = _amount;
+            highestBidder = msg.sender;
+            
+        }
+        else {
+            refund[msg.sender] = _amount;
+            token.transfer(msg.sender, _amount);
+        }
     }
 
     function withdraw() external { 
